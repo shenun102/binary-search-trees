@@ -95,7 +95,7 @@ export class Tree {
       // Replace node's value with the successor's value
       node.value = successor;
       // Delete in order successor
-      node.right = thjis.deleteItemRecursively(node.right, successor.value);
+      node.right = this.deleteItemRecursively(node.right, successor.value);
     }
 
     return node; // return the modified node
@@ -130,14 +130,6 @@ export class Tree {
     // Ensure callback is provided
     this.checkCallback(callback);
 
-    // Recursive helper function to determine the tree's height, starting from the given node.
-    const height = (node) => {
-      // Base case if node is null, height is 0
-      if (node === null) return 0;
-      // For non-null nodes, the height is 1 + the maximum heights of its left and right subtrees.
-      return 1 + Math.max(height(node.left), height(node.right));
-    };
-
     // Helper function to process all nodes at given level
     const processLevel = (node, level) => {
       // Base case if node is null, return, nothing to process
@@ -153,7 +145,7 @@ export class Tree {
     };
 
     // Get height of the tree
-    const treeHeight = height(this.root);
+    const treeHeight = this.height(this.root);
 
     // Traverse each level and process nodes at that level
     for (let i = 1; i <= treeHeight; i++) {
@@ -232,12 +224,64 @@ export class Tree {
       // Order: Left → Right → Root
     };
 
-    traversePostOrder(this.root)
+    traversePostOrder(this.root);
   }
 
   // Helper method for checking callback
   checkCallback(callback) {
     if (typeof callback !== "function")
       throw new Error("A callback function is required");
+  }
+
+  // Method for node height
+  height(node) {
+    // base case
+    if (node === null) return 0;
+    return 1 + Math.max(this.height(node.left), this.height(node.right));
+  }
+
+  // Method for depth
+  depth(node) {
+    // Helper function
+    const findDepth = (current, target, currentDepth) => {
+      // base case
+      if (current === null) return -1;
+
+      // If node is target node, return current depth
+      if (current === target) return currentDepth;
+
+      // Recursively searches in left subtree
+      let leftDepth = findDepth(current.left, target, currentDepth + 1);
+
+      // If found in left subtree return the result
+      if (leftDepth !== -1) return leftDepth;
+
+      // Otherwise recursively searches in right subtree
+      return findDepth(current.right, target, currentDepth + 1);
+    };
+
+    return findDepth(this.root, node, 0);
+  }
+
+  // Method for checking if its balanced
+  isBalanced(node = this.root) {
+    // The height method calls itself recursively
+    const leftHeight = this.height(this.root.left);
+    const rightHeight = this.height(this.root.right);
+
+    return (
+      Math.abs(leftHeight - rightHeight) <= 1 &&
+      this.isBalanced(node.left && this.isBalanced(node.right))
+    );
+  }
+
+  // Method for rebalancing tree
+  reBalance() {
+    let nodes = [];
+
+    this.inorder((node) => nodes.push(node.value));
+
+    // Step 2: Rebuild tree from the sorted array using buildTree
+    this.root = this.buildTree(nodes);
   }
 }
