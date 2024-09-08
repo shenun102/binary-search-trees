@@ -20,4 +20,9 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
   }
 };
 test.insert(9000);
+
+test.deleteItem(5343345);
+
 prettyPrint(test.root);
+console.log("");
+prettyPrint(test.findValue(324));

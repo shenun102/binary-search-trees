@@ -40,8 +40,6 @@ export class Tree {
   }
 
   insert(value) {
-    // Check if root is null
-    // recursively insert the new value
     this.root = this.insertRecursively(this.root, value);
   }
 
@@ -60,5 +58,68 @@ export class Tree {
 
     // Return the unchanged node pointer
     return node;
+  }
+
+  // Method to delete value
+  // There are three cases
+  deleteItem(value) {
+    this.root = this.deleteItemRecursively(this.root, value);
+  }
+
+  deleteItemRecursively(node, value) {
+    // Base case
+    if (node === null) return node;
+
+    // Traverse tree to find node
+
+    if (value < node.value) {
+      node.left = this.deleteItemRecursively(node.left, value);
+    } else if (value > node.value) {
+      node.right = this.deleteItemRecursively(node.right, value);
+    } else {
+      // Node to delete has been found
+
+      // Case 1: (leaf node)Node has no children
+      if (node.left === null && node.right === null) return null;
+
+      // Case 2: Node only has one child (left or right)
+      if (node.left === null) {
+        return node.right;
+      } else if (node.right === null) {
+        return node.left;
+      }
+
+      // Case 3: Node has two children
+      // Find the in-order successor (smallest node in the right subtree)
+      let successor = this.findMin(node.right);
+      // Replace node's value with the successor's value
+      node.value = successor;
+      // Delete in order successor
+      node.right = thjis.deleteItemRecursively(node.right, successor.value);
+    }
+
+    return node; // return the modified node
+  }
+
+  findMin(node) {
+    while (node.left !== null) {
+      node = node.left;
+    }
+    return node;
+  }
+
+  findValue(value) {
+    return this.findValueRecursively(this.root, value);
+  }
+
+  findValueRecursively(node, value) {
+    // Base case: if node is null or value is found
+    if (node === null || node.value === value) return node;
+
+    if (value < node.value) {
+      return this.findValueRecursively(node.left, value);
+    } else if (value > node.value) {
+      return this.findValueRecursively(node.right, value);
+    }
   }
 }
