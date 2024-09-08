@@ -13,6 +13,8 @@ export class Tree {
     // Remove duplicates using set feature
     const uniqueArr = [...new Set(array)].sort((a, b) => a - b);
 
+    console.log(uniqueArr);
+
     // Recursively build the tree
     this.root = this.buildBalancedTree(uniqueArr, 0, uniqueArr.length - 1);
   }
@@ -265,13 +267,18 @@ export class Tree {
 
   // Method for checking if its balanced
   isBalanced(node = this.root) {
-    // The height method calls itself recursively
-    const leftHeight = this.height(this.root.left);
-    const rightHeight = this.height(this.root.right);
+    // Base case
+    if (node === null) return true;
 
+    // Get the height of the left and right subtrees
+    const leftHeight = this.height(node.left);
+    const rightHeight = this.height(node.right);
+
+    // Check if the current node is balanced and recursively check left and right subtrees
     return (
       Math.abs(leftHeight - rightHeight) <= 1 &&
-      this.isBalanced(node.left && this.isBalanced(node.right))
+      this.isBalanced(node.left) &&
+      this.isBalanced(node.right)
     );
   }
 

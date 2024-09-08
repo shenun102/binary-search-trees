@@ -1,56 +1,42 @@
 import { Node } from "./node";
 import { Tree } from "./tree";
+import { testFunction } from "./driver";
 
-const test = new Tree([]);
 
-test.buildTree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
+// test.insert(9000);
 
-console.log(test.root);
+// test.deleteItem(5343345);
 
-const prettyPrint = (node, prefix = "", isLeft = true) => {
-  if (node === null) {
-    return;
-  }
-  if (node.right !== null) {
-    prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
-  }
-  console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.value}`);
-  if (node.left !== null) {
-    prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
-  }
-};
-test.insert(9000);
+// prettyPrint(test.root);
+// console.log("");
+// prettyPrint(test.findValue(324));
 
-test.deleteItem(5343345);
+// // Define the callback function that will be executed on each node
+// function printNode(node) {
+//   console.log(node.value);
+// }
 
-prettyPrint(test.root);
-console.log("");
-prettyPrint(test.findValue(324));
+// // Call levelOrder with the callback
+// prettyPrint(test.root);
+// test.levelOrder(printNode);
+// console.log("");
+// prettyPrint(test.root);
+// test.inorder(printNode);
+// console.log("");
+// prettyPrint(test.root);
+// test.preOrder(printNode);
+// console.log("");
+// prettyPrint(test.root);
+// test.postOrder(printNode);
 
-// Define the callback function that will be executed on each node
-function printNode(node) {
-  console.log(node.value);
-}
+// console.log("");
+// console.log(test.height(test.root));
 
-// Call levelOrder with the callback
-prettyPrint(test.root);
-test.levelOrder(printNode);
-console.log("");
-prettyPrint(test.root);
-test.inorder(printNode);
-console.log("");
-prettyPrint(test.root);
-test.preOrder(printNode);
-console.log("");
-prettyPrint(test.root);
-test.postOrder(printNode);
+// console.log("");
 
-console.log("");
-console.log(test.height(test.root));
+// console.log(test.root.left.left.right);
+// console.log(test.depth(test.root.left.left.right));
 
-console.log("");
+// console.log(test.isBalanced())
 
-console.log(test.root.left.left.right);
-console.log(test.depth(test.root.left.left.right));
-
-console.log(test.isBalanced())
+testFunction(15)
