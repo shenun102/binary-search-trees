@@ -108,6 +108,8 @@ export class Tree {
     return node;
   }
 
+  // Find value method
+
   findValue(value) {
     return this.findValueRecursively(this.root, value);
   }
@@ -121,5 +123,121 @@ export class Tree {
     } else if (value > node.value) {
       return this.findValueRecursively(node.right, value);
     }
+  }
+
+  // levelOrder(callback)
+  levelOrder(callback) {
+    // Ensure callback is provided
+    this.checkCallback(callback);
+
+    // Recursive helper function to determine the tree's height, starting from the given node.
+    const height = (node) => {
+      // Base case if node is null, height is 0
+      if (node === null) return 0;
+      // For non-null nodes, the height is 1 + the maximum heights of its left and right subtrees.
+      return 1 + Math.max(height(node.left), height(node.right));
+    };
+
+    // Helper function to process all nodes at given level
+    const processLevel = (node, level) => {
+      // Base case if node is null, return, nothing to process
+      if (node === null) return;
+      // If the level is 1, node is processed using callback passed in
+      if (level === 1) {
+        callback(node);
+      } else if (level > 1) {
+        // If level is greater than 1, the function calls itself recursively for left and right children of current node, reducing the level by 1 each time
+        processLevel(node.left, level - 1);
+        processLevel(node.right, level - 1);
+      }
+    };
+
+    // Get height of the tree
+    const treeHeight = height(this.root);
+
+    // Traverse each level and process nodes at that level
+    for (let i = 1; i <= treeHeight; i++) {
+      processLevel(this.root, i);
+    }
+  }
+
+  // inOrder(callback)
+  // In-Order Traversal (Left → Root → Right)
+  inorder(callback) {
+    // Check for callback with helper method
+    this.checkCallback(callback);
+
+    // Helper function to process nodes
+    const traverseInOrder = (node) => {
+      // check if node is null
+      if (node === null) return;
+
+      // traverse left subtree first
+      traverseInOrder(node.left);
+
+      // process current node
+      callback(node);
+
+      // traverse right subtree
+      traverseInOrder(node.right);
+    };
+
+    // Start traversal from root node
+    traverseInOrder(this.root);
+  }
+
+  // preOrder(callback)
+  // Pre-Order Traversal (Root → Left → Right)
+  preOrder(callback) {
+    // Check for callback with the helper method
+    this.checkCallback(callback);
+
+    // Helper function to process nodes
+    const traversePreOrder = (node) => {
+      // check if node is null
+      if (node === null) return;
+
+      // Visit the current node first (call the callback on the node).
+      callback(node);
+
+      // Traverse the left subtree (if it exists).
+      traversePreOrder(node.left);
+
+      // Traverse the right subtree (if it exists).
+      traversePreOrder(node.right);
+
+      // Order: Root → Left → Right
+    };
+
+    traversePreOrder(this.root);
+  }
+
+  // Post-Order Traversal (Left → Right → Root)
+  postOrder(callback) {
+    this.checkCallback(callback);
+
+    // Helper function to traverse post order
+    const traversePostOrder = (node) => {
+      // Base case
+      if (node === null) return;
+      // Traverse the left subtree first
+      traversePostOrder(node.left);
+
+      // Traverse the right subtree
+      traversePostOrder(node.right);
+
+      // Visit the current node last
+      callback(node);
+
+      // Order: Left → Right → Root
+    };
+
+    traversePostOrder(this.root)
+  }
+
+  // Helper method for checking callback
+  checkCallback(callback) {
+    if (typeof callback !== "function")
+      throw new Error("A callback function is required");
   }
 }
